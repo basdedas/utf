@@ -153,6 +153,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/utf.dir/build.make CMakeFiles/utf.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/utf.o: src/utf.cpp.o
+.PHONY : src/utf.o
+
+# target to build an object file
+src/utf.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/utf.dir/build.make CMakeFiles/utf.dir/src/utf.cpp.o
+.PHONY : src/utf.cpp.o
+
+src/utf.i: src/utf.cpp.i
+.PHONY : src/utf.i
+
+# target to preprocess a source file
+src/utf.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/utf.dir/build.make CMakeFiles/utf.dir/src/utf.cpp.i
+.PHONY : src/utf.cpp.i
+
+src/utf.s: src/utf.cpp.s
+.PHONY : src/utf.s
+
+# target to generate assembly for a file
+src/utf.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/utf.dir/build.make CMakeFiles/utf.dir/src/utf.cpp.s
+.PHONY : src/utf.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -165,6 +189,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/utf.o"
+	@echo "... src/utf.i"
+	@echo "... src/utf.s"
 .PHONY : help
 
 

@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/utf.dir/main.cpp.o -o utf 
+/usr/bin/c++ -g CMakeFiles/utf.dir/main.cpp.o CMakeFiles/utf.dir/src/utf.cpp.o -o utf 

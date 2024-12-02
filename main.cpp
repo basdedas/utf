@@ -1,6 +1,7 @@
 #include <iostream>
+#include "inc/utf.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    utf utf1("../test.txt");
     return 0;
 }

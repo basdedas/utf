@@ -81,12 +81,12 @@ clean: CMakeFiles/utf.dir/clean
 CMakeFiles/utf.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/utf.dir/build.make CMakeFiles/utf.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/utf.dir/build.make CMakeFiles/utf.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/cmake-build-debug-wsl-clang/CMakeFiles" --progress-num=1,2 "Built target utf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/cmake-build-debug-wsl-clang/CMakeFiles" --progress-num=1,2,3 "Built target utf"
 .PHONY : CMakeFiles/utf.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/utf.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/cmake-build-debug-wsl-clang/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/cmake-build-debug-wsl-clang/CMakeFiles" 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/utf.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/cmake-build-debug-wsl-clang/CMakeFiles" 0
 .PHONY : CMakeFiles/utf.dir/rule

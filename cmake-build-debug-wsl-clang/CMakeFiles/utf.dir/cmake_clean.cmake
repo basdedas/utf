@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/utf.dir/main.cpp.o"
   "CMakeFiles/utf.dir/main.cpp.o.d"
+  "CMakeFiles/utf.dir/src/utf.cpp.o"
+  "CMakeFiles/utf.dir/src/utf.cpp.o.d"
   "utf"
   "utf.pdb"
 )

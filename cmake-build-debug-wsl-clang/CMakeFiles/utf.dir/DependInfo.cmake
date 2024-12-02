@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/main.cpp" "CMakeFiles/utf.dir/main.cpp.o" "gcc" "CMakeFiles/utf.dir/main.cpp.o.d"
+  "/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/src/utf.cpp" "CMakeFiles/utf.dir/src/utf.cpp.o" "gcc" "CMakeFiles/utf.dir/src/utf.cpp.o.d"
   )
 
 # Targets to which this target links.

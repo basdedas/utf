@@ -3,4 +3,6 @@ project(utf)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(utf main.cpp)
+add_executable(utf main.cpp
+        inc/utf.h
+        src/utf.cpp)
