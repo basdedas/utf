@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cstdint>
 #include <string_view>
+#include <unordered_map>
 
 class utf {
 public:
@@ -21,10 +22,12 @@ public:
 
     void set_data(const std::string& file_path);
     void set_data(std::vector<uint8_t> data);
-    void get_data();
+    void populate_vector_data();
 
-    std::vector<uint8_t> search(uint8_t value);
-    std::vector<uint8_t> search(std::vector<uint8_t> value);
+    std::vector<uint8_t> get_data();
+
+    size_t search(uint8_t value);
+    size_t search(std::vector<uint8_t> value);
 
     std::vector<uint8_t> replace(uint8_t value, uint8_t new_value);
     std::vector<uint8_t> replace(std::vector<uint8_t> value, std::vector<uint8_t> new_value);
@@ -33,8 +36,11 @@ public:
     void delete_value(std::vector<uint8_t> value);
 
     void print();
+
 private:
     std::vector<uint8_t> data;
+    std::vector<std::vector<uint8_t>> vector_data;
+    //We use an unordered_map because it has an average lookup and insertion speed of O(1) as opposed to (ordered) map which has O(log n)
 };
 
 
