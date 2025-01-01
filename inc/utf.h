@@ -26,21 +26,24 @@ public:
 
     std::vector<uint8_t> get_data();
 
-    size_t search(uint8_t value);
-    size_t search(std::vector<uint8_t> value);
+    std::vector<size_t> search(uint8_t value);
+    std::vector<size_t> search(const std::vector<uint8_t>& value);
+    std::vector<size_t> search(const std::vector<std::vector<uint8_t>> &value);
 
-    std::vector<uint8_t> replace(uint8_t value, uint8_t new_value);
-    std::vector<uint8_t> replace(std::vector<uint8_t> value, std::vector<uint8_t> new_value);
+    void replace(const std::vector<uint8_t>& value, const std::vector<uint8_t>& new_value);
 
     void delete_value(uint8_t value);
-    void delete_value(std::vector<uint8_t> value);
+    void delete_value(const std::vector<uint8_t>& value);
 
-    void print();
+    void print(); //Prints all the data in vector_data
+    void print(const std::vector<size_t>& indices); //Prints indices inputted as parameter
+    static void print(const std::vector<std::vector<uint8_t>>& values); //Prints values inputted as parameter
 
 private:
     std::vector<uint8_t> data;
     std::vector<std::vector<uint8_t>> vector_data;
-    //We use an unordered_map because it has an average lookup and insertion speed of O(1) as opposed to (ordered) map which has O(log n)
+
+
 };
 
 

@@ -9,10 +9,9 @@
 #include "unordered_set"
 #include "../exc/NotFoundException"
 #include <algorithm>
+#include <iostream>
 
-utf::utf() {
-
-}
+utf::utf() = default;
 
 utf::utf(const std::string& file_path) {
     set_data(file_path);
@@ -58,30 +57,42 @@ void utf::set_data(std::vector<uint8_t> data) {
 }
 
 void utf::populate_vector_data() {
+    uint8_t buffer[4];
+    std::vector<std::vector<uint8_t>> result;   //Stores all the results of the character separation
+
     for(size_t i = 0; i < data.size(); i++){
-        std::vector<uint8_t> result;
-        if((data[i] & 0b10000000) == 0b10000000){           //For regular 1 byte (ASCII) characters
-            result.push_back(data[i]);
-        } else if ((data[i] & 0b11100000) == 0b11000000){   //For 2 byte characters
-            result.push_back(data[i]);
-            result.push_back(data[i + 1]);
+        std::vector<uint8_t> char_result;   //Stores the final vector with the character seperated in bytes (intermediate step)
+
+        //Initialize the buffer with the first 4 bytes based on i
+        buffer[0] = (uint8_t) data[i];
+        buffer[1] = (uint8_t) data[i + 1];
+        buffer[2] = (uint8_t) data[i + 2];
+        buffer[3] = (uint8_t) data[i + 3];
+
+        if((buffer[0] & 0b10000000) == 0b00000000){           //For regular 1 byte (ASCII) characters
+            char_result.push_back(buffer[0]);
+        } else if ((buffer[0] & 0b11100000) == 0b11000000){   //For 2 byte characters
+            char_result.push_back(buffer[0]);
+            char_result.push_back(buffer[1]);
             i++;
-        } else if ((data[i] & 0b11110000) == 0b11100000){   //For 3 byte characters
-            result.push_back(data[i]);
-            result.push_back(data[i + 1]);
-            result.push_back(data[i + 2]);
+        } else if ((buffer[0] & 0b11110000) == 0b11100000){   //For 3 byte characters
+            char_result.push_back(buffer[0]);
+            char_result.push_back(buffer[1]);
+            char_result.push_back(buffer[2]);
             i+=2;
-        } else if ((data[i] & 0b11111000) == 0b11110000){   //For 4 byte characters
-            result.push_back(data[i]);
-            result.push_back(data[i + 1]);
-            result.push_back(data[i + 2]);
-            result.push_back(data[i + 3]);
+        } else if ((buffer[0] & 0b11111000) == 0b11110000){   //For 4 byte characters
+            char_result.push_back(buffer[0]);
+            char_result.push_back(buffer[1]);
+            char_result.push_back(buffer[2]);
+            char_result.push_back(buffer[3]);
             i+=3;
         }
         else {
             throw std::runtime_error("Invalid UTF-8 character");
         }
+        result.push_back(char_result);
     } //The vector data will be populated with the character index in the original data as the index in the vector and the data translating to the character.
+    vector_data = std::move(result);
 }
 
 std::vector<uint8_t> utf::get_data() {
@@ -101,25 +112,79 @@ struct hash<std::vector<uint8_t>> {
 };
 }
 
-size_t utf::search(std::vector<uint8_t> value) {
-    std::unordered_set<std::vector<uint8_t>> data_set;
+//This function takes one char of one byte and searches for it in the vector_data
+std::vector<size_t> utf::search(uint8_t value) {
+    return search(std::vector<uint8_t>{value});
+}
 
-    for(size_t i = 0; i < data.size(); ++i){
-        data_set.insert(vector_data[i]);
+//This function takes one char of multiple bytes and searches for it in the vector_data
+std::vector<size_t> utf::search(const std::vector<uint8_t>& value) {
+    std::vector<size_t> indices;  //Stores the indices of the characters in value
+
+    for(size_t i = 0; i < vector_data.size(); i++){
+        if(vector_data[i] == value){
+            indices.push_back(i);
+        }
     }
 
-    auto it = data_set.find(value);
-    if(it == data_set.end()) throw NotFoundException();
-
-    return std::distance(vector_data.begin(), std::find(vector_data.begin(), vector_data.end(), *it));
-
+    if(indices.empty()){
+        throw NotFoundException();
+    }
+    return indices;
 }
 
-size_t utf::search(uint8_t value) {
-    std::vector<uint8_t> value_ = {value};
-    return search(value_);
+std::vector<size_t> utf::search(const std::vector<std::vector<uint8_t>>& value) {
+    std::vector<size_t> result; //Stores the indices of the value in vector_data
+    std::vector<std::vector<size_t>> indices;  //Stores the indices of the characters in value
+
+    for(const auto& current_datapoint : value){
+        indices.push_back(search(current_datapoint));
+    }
+
+    //Cycle over all indexes of the characters at index i in value
+    for(size_t j = 0; j < indices[0].size() - 1; j++){
+        //Cycle over all characters at index i
+        for (int i = 0; i < indices.size() - 1; i++){
+            std::vector<uint8_t> current_char = vector_data[indices[i][j]]; //Get the character at index i
+            if(std::find(indices[i + 1].begin(), indices[i + 1].end(), indices[i][j] + 1) != indices[i + 1].end()){ //If the next character is in the next vector
+                result.push_back(indices[i][j]); //Add the index to the result
+            } //Find the next character in the next vector
+        }
+    }
+    return result;
 }
 
-//std::vector<uint8_t> utf::replace(uint8_t value, uint8_t new_value) {
-//    search(value);
+//void utf::replace(const std::vector<uint8_t>& value, const std::vector<uint8_t>& new_value) {
+//    try {
+//        size_t index = search(value);
+//        vector_data[index] = new_value;
+//    } catch (...){
+//        throw std::exception();
+//    }
 //}
+
+//void utf::delete_value(uint8_t value) {
+//    std::vector<uint8_t> value_ {value};
+//    delete_value(value_);
+//}
+
+//void utf::delete_value(const std::vector<uint8_t>& value) {
+//    vector_data.erase(vector_data.begin() + search(value));
+//}
+
+void utf::print() {
+    print(vector_data);
+}
+
+void utf::print(const std::vector<size_t>& indices) {
+    for(auto index : indices){
+        std::cout << index << std::endl;
+    }
+}
+
+void utf::print(const std::vector<std::vector<uint8_t>>& values) {
+    for(auto value : values){
+        std::string str(value.begin(), value.end());
+        std::cout << str;
+    }
+}
