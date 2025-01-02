@@ -57,6 +57,10 @@ void utf::set_data(std::vector<uint8_t> data) {
 }
 
 void utf::populate_vector_data() {
+    vector_data = convert_chars_to_vector(data);
+}
+
+std::vector<std::vector<uint8_t>> utf::convert_chars_to_vector(std::vector<uint8_t> data) {
     uint8_t buffer[4];
     std::vector<std::vector<uint8_t>> result;   //Stores all the results of the character separation
 
@@ -68,6 +72,10 @@ void utf::populate_vector_data() {
         buffer[1] = (uint8_t) data[i + 1];
         buffer[2] = (uint8_t) data[i + 2];
         buffer[3] = (uint8_t) data[i + 3];
+
+        if(buffer[0] == 13){    //Delete / ignore cursor reset
+            continue;
+        }
 
         if((buffer[0] & 0b10000000) == 0b00000000){           //For regular 1 byte (ASCII) characters
             char_result.push_back(buffer[0]);
@@ -92,29 +100,11 @@ void utf::populate_vector_data() {
         }
         result.push_back(char_result);
     } //The vector data will be populated with the character index in the original data as the index in the vector and the data translating to the character.
-    vector_data = std::move(result);
+    return result;
 }
 
 std::vector<uint8_t> utf::get_data() {
     return this->data;
-}
-namespace std {
-
-    template <>
-struct hash<std::vector<uint8_t>> {
-    std::size_t operator()(const std::vector<uint8_t>& v) const {
-    std::size_t seed = 0;
-    for (auto& elem : v) {
-        seed ^= std::hash<uint8_t>{}(elem) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-    }
-    return seed;
-    }
-};
-}
-
-//This function takes one char of one byte and searches for it in the vector_data
-std::vector<size_t> utf::search(uint8_t value) {
-    return search(std::vector<uint8_t>{value});
 }
 
 //This function takes one char of multiple bytes and searches for it in the vector_data
@@ -141,36 +131,29 @@ std::vector<size_t> utf::search(const std::vector<std::vector<uint8_t>>& value) 
         indices.push_back(search(current_datapoint));
     }
 
+    size_t smallest_vector = indices[0].size();
+    for(size_t i = 0; i < indices.size(); i++) smallest_vector = std::min(smallest_vector, indices[i].size());
+
+    if(smallest_vector == 0){
+        throw NotFoundException();
+    } else if(indices.size() == 1){
+        return indices[0];
+    }
+
     //Cycle over all indexes of the characters at index i in value
-    for(size_t j = 0; j < indices[0].size() - 1; j++){
+    for(size_t j = 0; j < indices[0].size(); j++){
         //Cycle over all characters at index i
-        for (int i = 0; i < indices.size() - 1; i++){
-            std::vector<uint8_t> current_char = vector_data[indices[i][j]]; //Get the character at index i
-            if(std::find(indices[i + 1].begin(), indices[i + 1].end(), indices[i][j] + 1) != indices[i + 1].end()){ //If the next character is in the next vector
-                result.push_back(indices[i][j]); //Add the index to the result
-            } //Find the next character in the next vector
-        }
+        std::vector<uint8_t> current_char = vector_data[indices[0][j]]; //Get the character at index i
+        if(std::find(indices[1].begin(), indices[1].end(), indices[0][j] + 1) != indices[1].end()){ //If the next character is in the next vector
+            result.push_back(indices[0][j]); //Add the index to the result
+        } //Find the next character in the next vector
     }
     return result;
 }
 
-//void utf::replace(const std::vector<uint8_t>& value, const std::vector<uint8_t>& new_value) {
-//    try {
-//        size_t index = search(value);
-//        vector_data[index] = new_value;
-//    } catch (...){
-//        throw std::exception();
-//    }
-//}
-
-//void utf::delete_value(uint8_t value) {
-//    std::vector<uint8_t> value_ {value};
-//    delete_value(value_);
-//}
-
-//void utf::delete_value(const std::vector<uint8_t>& value) {
-//    vector_data.erase(vector_data.begin() + search(value));
-//}
+std::vector<size_t> utf::search(const std::string& value) {
+    return search(convert_chars_to_vector(std::vector<uint8_t>(value.begin(), value.end())));
+}
 
 void utf::print() {
     print(vector_data);
@@ -187,4 +170,61 @@ void utf::print(const std::vector<std::vector<uint8_t>>& values) {
         std::string str(value.begin(), value.end());
         std::cout << str;
     }
+}
+
+void utf::replace(std::vector<std::vector<uint8_t>> value, std::vector<std::vector<uint8_t>> new_value) {
+    try {
+        std::vector<size_t> indices = search(value);
+
+        for(int i = 0; i < indices.size(); i++){
+            auto index = indices[i];
+            vector_data.erase(vector_data.begin() + index, vector_data.begin() + index + value.size());
+            vector_data.insert(vector_data.begin() + index, new_value.begin(), new_value.end());
+            indices = update_indices(indices, new_value.size() - value.size(), index);
+        }
+    } catch (...){
+        throw std::exception();
+    }
+}
+
+void utf::replace(const std::string &value, const std::string &new_value) {
+    replace(convert_chars_to_vector(std::vector<uint8_t>(value.begin(), value.end())), convert_chars_to_vector(std::vector<uint8_t>(new_value.begin(), new_value.end())));
+}
+
+void utf::delete_value(const std::vector<std::vector<uint8_t>> &value) {
+    try {
+        std::vector<size_t> indices = search(value);
+
+        for(int i = 0; i < indices.size(); i++){
+            auto index = indices[i];
+            vector_data.erase(vector_data.begin() + index, vector_data.begin() + index + value.size());
+            indices = update_indices(indices, -value.size(), index);
+        }
+    } catch (...){
+        throw std::exception();
+    }
+}
+
+void utf::delete_value(const std::string &value) {
+    delete_value(convert_chars_to_vector(std::vector<uint8_t>(value.begin(), value.end())));
+}
+
+void utf::insert_value(const std::vector<std::vector<uint8_t>> &value, size_t index) {
+    vector_data.insert(vector_data.begin() + index, value.begin(), value.end());
+}
+
+void utf::insert_value(const std::string &value, size_t index) {
+    insert_value(convert_chars_to_vector(std::vector<uint8_t>(value.begin(), value.end())), index);
+}
+
+std::vector<size_t> utf::update_indices(const std::vector<size_t>& indices, size_t change_length, size_t start_index) {
+    std::vector<size_t> result;
+    for (auto index : indices) {
+        if (index >= start_index) {
+            result.push_back(index + change_length);
+        } else {
+            result.push_back(index);
+        }
+    }
+    return result;
 }
