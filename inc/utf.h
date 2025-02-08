@@ -21,7 +21,7 @@ public:
     void set_data(const std::string& file_path);
     void set_data(std::vector<uint8_t> data);
     void populate_vector_data();
-    std::vector<std::vector<uint8_t>> convert_chars_to_vector(std::vector<uint8_t> data);
+    static std::vector<std::vector<uint8_t>> convert_chars_to_vector(std::vector<uint8_t> data);
 
     std::vector<uint8_t> get_data();
     std::vector<size_t> search(const std::string&);
@@ -46,7 +46,6 @@ private:
     void delete_value(const std::vector<std::vector<uint8_t>> &value);
     void insert_value(const std::vector<std::vector<uint8_t>> &value, size_t index);
     static std::vector<size_t> update_indices(const std::vector<size_t>& indices, size_t change_length, size_t start_index);
-
 };
 
 

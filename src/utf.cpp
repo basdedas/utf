@@ -94,8 +94,7 @@ std::vector<std::vector<uint8_t>> utf::convert_chars_to_vector(std::vector<uint8
             char_result.push_back(buffer[2]);
             char_result.push_back(buffer[3]);
             i+=3;
-        }
-        else {
+        } else {
             throw std::runtime_error("Invalid UTF-8 character");
         }
         result.push_back(char_result);
@@ -124,30 +123,29 @@ std::vector<size_t> utf::search(const std::vector<uint8_t>& value) {
 }
 
 std::vector<size_t> utf::search(const std::vector<std::vector<uint8_t>>& value) {
-    std::vector<size_t> result; //Stores the indices of the value in vector_data
-    std::vector<std::vector<size_t>> indices;  //Stores the indices of the characters in value
+    std::vector<size_t> result;                     //Stores the indices of the value in vector_data
+    std::vector<size_t> indices_firt_character;     //Stores the indices of the first character in value
 
-    for(const auto& current_datapoint : value){
-        indices.push_back(search(current_datapoint));
+    //Finds all the indices in the text for each of the characters in value
+    indices_firt_character = search(value[0]);
+
+    size_t value_size = value.size();
+    //For max amount of matches
+    for(size_t j = 0; j < indices_firt_character.size(); j++) {
+        //For characters in value
+        for(size_t k = 0; k < value_size; k++){
+            //If character at the relative index k in vector_data corresponds to the character at index k of the to be searched for string
+            if(vector_data[indices_firt_character[j] + k] == value[k]) {
+                //If all checked then add to result
+                if(k == value_size - 1) result.push_back(indices_firt_character[j]);
+                continue;
+            } else break;
+        }
     }
 
-    size_t smallest_vector = indices[0].size();
-    for(size_t i = 0; i < indices.size(); i++) smallest_vector = std::min(smallest_vector, indices[i].size());
+    //If all checked and no result, throw not found exception.
+    if(result.empty()) throw NotFoundException();
 
-    if(smallest_vector == 0){
-        throw NotFoundException();
-    } else if(indices.size() == 1){
-        return indices[0];
-    }
-
-    //Cycle over all indexes of the characters at index i in value
-    for(size_t j = 0; j < indices[0].size(); j++){
-        //Cycle over all characters at index i
-        std::vector<uint8_t> current_char = vector_data[indices[0][j]]; //Get the character at index i
-        if(std::find(indices[1].begin(), indices[1].end(), indices[0][j] + 1) != indices[1].end()){ //If the next character is in the next vector
-            result.push_back(indices[0][j]); //Add the index to the result
-        } //Find the next character in the next vector
-    }
     return result;
 }
 
