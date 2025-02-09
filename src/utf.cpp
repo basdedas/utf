@@ -65,7 +65,7 @@ std::vector<std::vector<uint8_t>> utf::convert_chars_to_vector(std::vector<uint8
     std::vector<std::vector<uint8_t>> result;   //Stores all the results of the character separation
 
     for(size_t i = 0; i < data.size(); i++){
-        std::vector<uint8_t> char_result;   //Stores the final vector with the character seperated in bytes (intermediate step)
+        std::vector<uint8_t> char_result;   //Stores the final vector with the character separated in bytes (intermediate step)
 
         //Initialize the buffer with the first 4 bytes based on i
         buffer[0] = (uint8_t) data[i];
@@ -102,9 +102,6 @@ std::vector<std::vector<uint8_t>> utf::convert_chars_to_vector(std::vector<uint8
     return result;
 }
 
-std::vector<uint8_t> utf::get_data() {
-    return this->data;
-}
 
 //This function takes one char of multiple bytes and searches for it in the vector_data
 std::vector<size_t> utf::search(const std::vector<uint8_t>& value) {
@@ -122,6 +119,7 @@ std::vector<size_t> utf::search(const std::vector<uint8_t>& value) {
     return indices;
 }
 
+//This function takes a series of characters and searches for it in vector_data
 std::vector<size_t> utf::search(const std::vector<std::vector<uint8_t>>& value) {
     std::vector<size_t> result;                     //Stores the indices of the value in vector_data
     std::vector<size_t> indices_firt_character;     //Stores the indices of the first character in value
@@ -158,13 +156,13 @@ void utf::print() {
 }
 
 void utf::print(const std::vector<size_t>& indices) {
-    for(auto index : indices){
+    for(const auto& index : indices){
         std::cout << index << std::endl;
     }
 }
 
 void utf::print(const std::vector<std::vector<uint8_t>>& values) {
-    for(auto value : values){
+    for(const auto& value : values){
         std::string str(value.begin(), value.end());
         std::cout << str;
     }
@@ -172,13 +170,15 @@ void utf::print(const std::vector<std::vector<uint8_t>>& values) {
 
 void utf::replace(std::vector<std::vector<uint8_t>> value, std::vector<std::vector<uint8_t>> new_value) {
     try {
+        //All indices where the to be replaces value is
         std::vector<size_t> indices = search(value);
 
-        for(int i = 0; i < indices.size(); i++){
-            auto index = indices[i];
-            vector_data.erase(vector_data.begin() + index, vector_data.begin() + index + value.size());
-            vector_data.insert(vector_data.begin() + index, new_value.begin(), new_value.end());
-            indices = update_indices(indices, new_value.size() - value.size(), index);
+        //For all those indices
+        for(size_t i = 0; i < indices.size(); i++){
+            auto index = indices[i];                                                       //Current index
+            vector_data.erase(vector_data.begin() + index, vector_data.begin() + index + value.size()); //Remove value
+            vector_data.insert(vector_data.begin() + index, new_value.begin(), new_value.end());        //Insert value
+            indices = update_indices(indices, new_value.size() - value.size(), index);                  //Correct indices
         }
     } catch (...){
         throw std::exception();

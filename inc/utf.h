@@ -23,7 +23,6 @@ public:
     void populate_vector_data();
     static std::vector<std::vector<uint8_t>> convert_chars_to_vector(std::vector<uint8_t> data);
 
-    std::vector<uint8_t> get_data();
     std::vector<size_t> search(const std::string&);
 
     void replace(const std::string& value, const std::string& new_value);
@@ -31,8 +30,8 @@ public:
     void insert_value(const std::string& value, size_t index);
 
     void print(); //Prints all the data in vector_data
-    void print(const std::vector<size_t>& indices); //Prints indices inputted as parameter
-    void print(const std::vector<std::vector<uint8_t>>& values); //Prints values inputted as parameter
+    static void print(const std::vector<size_t>& indices); //Prints indices inputted as parameter
+    static void print(const std::vector<std::vector<uint8_t>>& values); //Prints values inputted as parameter
 
 
 private:
