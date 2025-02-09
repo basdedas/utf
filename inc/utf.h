@@ -19,7 +19,7 @@ public:
     ~utf();
 
     void set_data(const std::string& file_path);
-    void set_data(std::vector<uint8_t> data);
+    void set_data(std::vector<uint8_t> data_);
     void populate_vector_data();
     static std::vector<std::vector<uint8_t>> convert_chars_to_vector(std::vector<uint8_t> data);
 
