@@ -1,11 +1,6 @@
-//
-// Created by basva on 26/11/2024.
-//
-
 #include "../inc/utf.h"
 #include <fstream>
 #include <utility>
-#include "exception"
 #include "../exc/NotFoundException"
 #include <iostream>
 

@@ -196,17 +196,7 @@ CMakeFiles/utf.dir/main.cpp.o: ../main.cpp \
   /usr/include/c++/12/bits/stl_uninitialized.h \
   /usr/include/c++/12/bits/stl_vector.h \
   /usr/include/c++/12/bits/stl_bvector.h \
-  /usr/include/c++/12/bits/vector.tcc \
-  /usr/include/c++/12/unordered_map \
-  /usr/include/c++/12/ext/aligned_buffer.h \
-  /usr/include/c++/12/bits/hashtable.h \
-  /usr/include/c++/12/bits/hashtable_policy.h \
-  /usr/include/c++/12/tuple \
-  /usr/include/c++/12/bits/uses_allocator.h \
-  /usr/include/c++/12/bits/enable_special_members.h \
-  /usr/include/c++/12/bits/node_handle.h \
-  /usr/include/c++/12/bits/unordered_map.h \
-  /usr/include/c++/12/bits/erase_if.h
+  /usr/include/c++/12/bits/vector.tcc
 
 CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
   /usr/include/stdc-predef.h \
@@ -285,39 +275,29 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
-  /usr/include/c++/12/cstdint \
-  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h \
-  /usr/include/stdint.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
   /usr/include/c++/12/string_view \
   /usr/include/c++/12/iosfwd \
   /usr/include/c++/12/bits/stringfwd.h \
   /usr/include/c++/12/bits/postypes.h \
   /usr/include/c++/12/cwchar \
   /usr/include/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/c++/12/bits/char_traits.h \
+  /usr/include/c++/12/cstdint \
+  /usr/lib/gcc/x86_64-linux-gnu/12/include/stdint.h \
+  /usr/include/stdint.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
   /usr/include/c++/12/bits/ostream_insert.h \
   /usr/include/c++/12/bits/cxxabi_forced.h \
   /usr/include/c++/12/bits/ranges_base.h \
   /usr/include/c++/12/bits/max_size_type.h \
   /usr/include/c++/12/numbers \
   /usr/include/c++/12/bits/string_view.tcc \
-  /usr/include/c++/12/unordered_map \
-  /usr/include/c++/12/ext/aligned_buffer.h \
-  /usr/include/c++/12/bits/hashtable.h \
-  /usr/include/c++/12/bits/hashtable_policy.h \
-  /usr/include/c++/12/tuple \
-  /usr/include/c++/12/bits/uses_allocator.h \
-  /usr/include/c++/12/bits/enable_special_members.h \
-  /usr/include/c++/12/bits/node_handle.h \
-  /usr/include/c++/12/bits/unordered_map.h \
-  /usr/include/c++/12/bits/erase_if.h \
   /usr/include/c++/12/fstream \
   /usr/include/c++/12/istream \
   /usr/include/c++/12/ios \
@@ -420,34 +400,9 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
   /usr/include/c++/12/bits/fstream.tcc \
   /usr/include/c++/12/utility \
   /usr/include/c++/12/bits/stl_relops.h \
-  /usr/include/c++/12/unordered_set \
-  /usr/include/c++/12/bits/unordered_set.h \
   ../exc/NotFoundException \
-  /usr/include/c++/12/algorithm \
-  /usr/include/c++/12/bits/stl_algo.h \
-  /usr/include/c++/12/bits/algorithmfwd.h \
-  /usr/include/c++/12/bits/stl_heap.h \
-  /usr/include/c++/12/bits/stl_tempbuf.h \
-  /usr/include/c++/12/bits/uniform_int_dist.h \
-  /usr/include/c++/12/bits/ranges_algo.h \
-  /usr/include/c++/12/bits/ranges_algobase.h \
-  /usr/include/c++/12/bits/ranges_util.h \
-  /usr/include/c++/12/pstl/glue_algorithm_defs.h \
-  /usr/include/c++/12/pstl/execution_defs.h \
   /usr/include/c++/12/iostream
 
-
-/usr/include/c++/12/pstl/glue_algorithm_defs.h:
-
-/usr/include/c++/12/bits/ranges_algobase.h:
-
-/usr/include/c++/12/bits/stl_tempbuf.h:
-
-/usr/include/c++/12/bits/stl_heap.h:
-
-/usr/include/c++/12/bits/algorithmfwd.h:
-
-/usr/include/c++/12/bits/stl_algo.h:
 
 /usr/include/c++/12/bits/fstream.tcc:
 
@@ -458,18 +413,6 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 /usr/include/c++/12/bits/codecvt.h:
 
 /usr/include/c++/12/fstream:
-
-/usr/include/c++/12/bits/erase_if.h:
-
-/usr/include/c++/12/bits/unordered_map.h:
-
-/usr/include/c++/12/bits/enable_special_members.h:
-
-/usr/include/c++/12/ext/aligned_buffer.h:
-
-/usr/include/c++/12/unordered_map:
-
-/usr/include/c++/12/bits/unordered_set.h:
 
 /usr/include/c++/12/bits/stl_bvector.h:
 
@@ -485,13 +428,9 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 
 /usr/include/c++/12/cwctype:
 
-/usr/include/c++/12/tuple:
-
 /usr/include/c++/12/bits/ostream.tcc:
 
 /usr/include/c++/12/bits/locale_facets.h:
-
-/usr/include/c++/12/pstl/execution_defs.h:
 
 /usr/include/c++/12/bits/basic_ios.h:
 
@@ -528,8 +467,6 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
 
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
-
-/usr/include/c++/12/bits/hashtable.h:
 
 /usr/include/endian.h:
 
@@ -579,8 +516,6 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 
 /usr/include/c++/12/typeinfo:
 
-/usr/include/c++/12/unordered_set:
-
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
 
 /usr/include/x86_64-linux-gnu/asm/errno.h:
@@ -613,8 +548,6 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 
 /usr/include/c++/12/bits/ptr_traits.h:
 
-/usr/include/c++/12/bits/hashtable_policy.h:
-
 /usr/include/c++/12/numbers:
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
@@ -623,13 +556,9 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 
 /usr/include/c++/12/exception:
 
-/usr/include/c++/12/bits/uniform_int_dist.h:
-
 /usr/include/c++/12/bits/std_abs.h:
 
 /usr/include/c++/12/debug/assertions.h:
-
-/usr/include/c++/12/algorithm:
 
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
 
@@ -679,8 +608,6 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
-/usr/include/c++/12/bits/uses_allocator.h:
-
 /usr/include/c++/12/bits/stl_iterator_base_funcs.h:
 
 /usr/include/c++/12/utility:
@@ -709,8 +636,6 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 
 /usr/include/c++/12/bits/stl_relops.h:
 
-/usr/include/c++/12/bits/node_handle.h:
-
 /usr/include/c++/12/cstdint:
 
 /usr/include/c++/12/clocale:
@@ -730,8 +655,6 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 /usr/include/c++/12/bits/refwrap.h:
 
 /usr/include/c++/12/ios:
-
-/usr/include/c++/12/bits/ranges_algo.h:
 
 /usr/include/linux/errno.h:
 
@@ -884,8 +807,6 @@ CMakeFiles/utf.dir/src/utf.cpp.o: ../src/utf.cpp \
 /usr/include/c++/12/bits/predefined_ops.h:
 
 /usr/include/c++/12/bits/functexcept.h:
-
-/usr/include/c++/12/bits/ranges_util.h:
 
 /usr/include/c++/12/bits/stl_function.h:
 

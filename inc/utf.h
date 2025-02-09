@@ -1,14 +1,9 @@
-//
-// Created by basva on 26/11/2024.
-//
-
 #ifndef UTF_UTF_H
 #define UTF_UTF_H
 #include <vector>
 #include <cstdio>
 #include <cstdint>
 #include <string_view>
-#include <unordered_map>
 
 class utf {
 public:
