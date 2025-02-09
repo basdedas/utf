@@ -6,9 +6,7 @@
 #include <fstream>
 #include <utility>
 #include "exception"
-#include "unordered_set"
 #include "../exc/NotFoundException"
-#include <algorithm>
 #include <iostream>
 
 utf::utf() = default;
@@ -122,20 +120,20 @@ std::vector<size_t> utf::search(const std::vector<uint8_t>& value) {
 //This function takes a series of characters and searches for it in vector_data
 std::vector<size_t> utf::search(const std::vector<std::vector<uint8_t>>& value) {
     std::vector<size_t> result;                     //Stores the indices of the value in vector_data
-    std::vector<size_t> indices_firt_character;     //Stores the indices of the first character in value
+    std::vector<size_t> indices_first_character;     //Stores the indices of the first character in value
 
     //Finds all the indices in the text for each of the characters in value
-    indices_firt_character = search(value[0]);
+    indices_first_character = search(value[0]);
 
     size_t value_size = value.size();
     //For max amount of matches
-    for(size_t j = 0; j < indices_firt_character.size(); j++) {
+    for(size_t j = 0; j < indices_first_character.size(); j++) {
         //For characters in value
         for(size_t k = 0; k < value_size; k++){
             //If character at the relative index k in vector_data corresponds to the character at index k of the to be searched for string
-            if(vector_data[indices_firt_character[j] + k] == value[k]) {
+            if(vector_data[indices_first_character[j] + k] == value[k]) {
                 //If all checked then add to result
-                if(k == value_size - 1) result.push_back(indices_firt_character[j]);
+                if(k == value_size - 1) result.push_back(indices_first_character[j]);
                 continue;
             } else break;
         }
@@ -168,7 +166,7 @@ void utf::print(const std::vector<std::vector<uint8_t>>& values) {
     }
 }
 
-void utf::replace(std::vector<std::vector<uint8_t>> value, std::vector<std::vector<uint8_t>> new_value) {
+void utf::replace(const std::vector<std::vector<uint8_t>>& value, std::vector<std::vector<uint8_t>> new_value) {
     try {
         //All indices where the to be replaces value is
         std::vector<size_t> indices = search(value);

@@ -41,7 +41,7 @@ private:
     std::vector<size_t> search(const std::vector<uint8_t>& value);
     std::vector<size_t> search(const std::vector<std::vector<uint8_t>> &value);
 
-    void replace(std::vector<std::vector<uint8_t>> value, std::vector<std::vector<uint8_t>> new_value);
+    void replace(const std::vector<std::vector<uint8_t>>& value, std::vector<std::vector<uint8_t>> new_value);
     void delete_value(const std::vector<std::vector<uint8_t>> &value);
     void insert_value(const std::vector<std::vector<uint8_t>> &value, size_t index);
     static std::vector<size_t> update_indices(const std::vector<size_t>& indices, size_t change_length, size_t start_index);
