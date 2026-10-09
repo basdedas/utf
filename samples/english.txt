@@ -1,0 +1,4 @@
+UTF-8 stores each character in one to four bytes.
+Plain English letters take one byte, but accented letters such as é or ü take two.
+This library never splits a character in the middle, so searching and replacing stays safe.
+A four-byte example: 😀
