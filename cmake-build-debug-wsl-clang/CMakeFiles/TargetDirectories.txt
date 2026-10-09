@@ -1,3 +1,0 @@
-/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/cmake-build-debug-wsl-clang/CMakeFiles/utf.dir
-/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/cmake-build-debug-wsl-clang/CMakeFiles/edit_cache.dir
-/mnt/c/Users/basva/OneDrive - Saxion/Advanced Programming concepts/utf/cmake-build-debug-wsl-clang/CMakeFiles/rebuild_cache.dir

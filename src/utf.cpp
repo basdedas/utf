@@ -3,6 +3,21 @@
 #include <utility>
 #include "../exc/NotFoundException"
 #include <iostream>
+#include <stdexcept>
+
+namespace {
+    //Keeps only matches that do not overlap with an earlier kept match (left to right),
+    //e.g. searching "aa" in "aaa" finds indices {0, 1}, but only index 0 can be replaced or deleted.
+    std::vector<size_t> non_overlapping(const std::vector<size_t>& indices, size_t match_length) {
+        std::vector<size_t> result;
+        for (size_t index : indices) {
+            if (result.empty() || index >= result.back() + match_length) {
+                result.push_back(index);
+            }
+        }
+        return result;
+    }
+}
 
 utf::utf() = default;
 
@@ -66,14 +81,22 @@ std::vector<std::vector<uint8_t>> utf::convert_chars_to_vector(std::vector<uint8
         for(size_t i = 0; i < data.size(); i++){
             std::vector<uint8_t> char_result;   //Stores the final vector with the character separated in bytes (intermediate step)
 
-            //Initialize the buffer with the first 4 bytes based on i
-            buffer[0] = (uint8_t) data[i];
-            buffer[1] = (uint8_t) data[i + 1];
-            buffer[2] = (uint8_t) data[i + 2];
-            buffer[3] = (uint8_t) data[i + 3];
+            //Initialize the buffer with the first 4 bytes based on i (padded with 0 past the end of the data)
+            for(size_t k = 0; k < 4; k++){
+                buffer[k] = (i + k < data.size()) ? (uint8_t) data[i + k] : 0;
+            }
 
             if(buffer[0] == 13){    //Delete / ignore cursor reset
                 continue;
+            }
+
+            //Number of bytes the lead byte announces; a truncated sequence at the end of the data is an error
+            size_t expected_length = 1;
+            if((buffer[0] & 0b11100000) == 0b11000000) expected_length = 2;
+            else if((buffer[0] & 0b11110000) == 0b11100000) expected_length = 3;
+            else if((buffer[0] & 0b11111000) == 0b11110000) expected_length = 4;
+            if(i + expected_length > data.size()){
+                throw std::runtime_error("Truncated UTF-8 character");
             }
 
             if((buffer[0] & 0b10000000) == 0b00000000){           //For regular 1 byte (ASCII) characters
@@ -121,6 +144,8 @@ std::vector<size_t> utf::search(const std::vector<uint8_t>& value) {
             throw NotFoundException();
         }
         return indices;
+    } catch (const NotFoundException&){
+        throw;
     } catch (...){
         throw std::runtime_error("Error occurred in search() (one character)");
     }
@@ -129,6 +154,8 @@ std::vector<size_t> utf::search(const std::vector<uint8_t>& value) {
 
 //This function takes a series of characters and searches for it in vector_data
 std::vector<size_t> utf::search(const std::vector<std::vector<uint8_t>>& value) {
+    if(value.empty()) throw std::invalid_argument("Cannot search for an empty string");
+
     try{
         std::vector<size_t> result;                     //Stores the indices of the value in vector_data
         std::vector<size_t> indices_first_character;     //Stores the indices of the first character in value
@@ -141,6 +168,8 @@ std::vector<size_t> utf::search(const std::vector<std::vector<uint8_t>>& value) 
         for(unsigned long j : indices_first_character) {
             //For characters in value
             for(size_t k = 0; k < value_size; k++){
+                //Stop when the match would run past the end of the text
+                if(j + k >= vector_data.size()) break;
                 //If character at the relative index k in vector_data corresponds to the character at index k of the to be searched for string
                 if(vector_data[j + k] == value[k]) {
                     //If all checked then add to result
@@ -183,19 +212,16 @@ void utf::print(const std::vector<std::vector<uint8_t>>& values) {
 }
 
 void utf::replace(const std::vector<std::vector<uint8_t>>& value, std::vector<std::vector<uint8_t>> new_value) {
-    try {
-        //All indices where the to be replaces value is
-        std::vector<size_t> indices = search(value);
+    //All non-overlapping indices where the to be replaced value is (throws NotFoundException if there are none)
+    std::vector<size_t> indices = non_overlapping(search(value), value.size());
+    const auto change = static_cast<std::ptrdiff_t>(new_value.size()) - static_cast<std::ptrdiff_t>(value.size());
 
-        //For all those indices
-        for(size_t i = 0; i < indices.size(); i++){
-            auto index = indices[i];                                                       //Current index
-            vector_data.erase(vector_data.begin() + index, vector_data.begin() + index + value.size()); //Remove value
-            vector_data.insert(vector_data.begin() + index, new_value.begin(), new_value.end());        //Insert value
-            indices = update_indices(indices, new_value.size() - value.size(), index);                  //Correct indices
-        }
-    } catch (...){
-        throw std::exception();
+    //For all those indices
+    for(size_t i = 0; i < indices.size(); i++){
+        auto index = indices[i];                                                       //Current index
+        vector_data.erase(vector_data.begin() + index, vector_data.begin() + index + value.size()); //Remove value
+        vector_data.insert(vector_data.begin() + index, new_value.begin(), new_value.end());        //Insert value
+        indices = update_indices(indices, change, index);                                           //Correct indices
     }
 }
 
@@ -204,16 +230,14 @@ void utf::replace(const std::string &value, const std::string &new_value) {
 }
 
 void utf::delete_value(const std::vector<std::vector<uint8_t>> &value) {
-    try {
-        std::vector<size_t> indices = search(value);
+    //All non-overlapping indices where the value is (throws NotFoundException if there are none)
+    std::vector<size_t> indices = non_overlapping(search(value), value.size());
+    const auto change = -static_cast<std::ptrdiff_t>(value.size());
 
-        for(int i = 0; i < indices.size(); i++){
-            auto index = indices[i];
-            vector_data.erase(vector_data.begin() + index, vector_data.begin() + index + value.size());
-            indices = update_indices(indices, -value.size(), index);
-        }
-    } catch (...){
-        throw std::exception();
+    for(size_t i = 0; i < indices.size(); i++){
+        auto index = indices[i];
+        vector_data.erase(vector_data.begin() + index, vector_data.begin() + index + value.size());
+        indices = update_indices(indices, change, index);
     }
 }
 
@@ -222,6 +246,7 @@ void utf::delete_value(const std::string &value) {
 }
 
 void utf::insert_value(const std::vector<std::vector<uint8_t>> &value, size_t index) {
+    if(index > vector_data.size()) throw std::out_of_range("Insert index is past the end of the text");
     vector_data.insert(vector_data.begin() + index, value.begin(), value.end());
 }
 
@@ -229,11 +254,11 @@ void utf::insert_value(const std::string &value, size_t index) {
     insert_value(convert_chars_to_vector(std::vector<uint8_t>(value.begin(), value.end())), index);
 }
 
-std::vector<size_t> utf::update_indices(const std::vector<size_t>& indices, size_t change_length, size_t start_index) {
+std::vector<size_t> utf::update_indices(const std::vector<size_t>& indices, std::ptrdiff_t change_length, size_t start_index) {
     std::vector<size_t> result;
     for (auto index : indices) {
         if (index >= start_index) {
-            result.push_back(index + change_length);
+            result.push_back(static_cast<size_t>(static_cast<std::ptrdiff_t>(index) + change_length));
         } else {
             result.push_back(index);
         }
