@@ -54,7 +54,7 @@ file.insert(5, "bar");
 
 ## Build
 
-Requires CMake 3.x and a C++17-compatible compiler.
+Requires CMake 3.x and a C++20-compatible compiler.
 
 ```bash
 mkdir build && cd build

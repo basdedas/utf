@@ -13,6 +13,7 @@ target_include_directories(utf_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(utf main.cpp)
 target_link_libraries(utf PRIVATE utf_lib)
+target_compile_definitions(utf PRIVATE UTF_SAMPLES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/samples")
 
 # Tests (turn off with: cmake -S . -B build -DUTF_BUILD_TESTS=OFF)
 option(UTF_BUILD_TESTS "Build the unit tests" ON)
